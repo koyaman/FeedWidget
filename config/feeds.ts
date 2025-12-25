@@ -1,4 +1,5 @@
 export type FeedCategory = 
+  'all' |
   'frontend-domestic' | 
   'frontend-international' | 
   'web-domestic' | 
@@ -397,6 +398,7 @@ export const feeds: FeedConfig[] = [
 ];
 
 export const categories: { id: FeedCategory; label: string }[] = [
+  { id: 'all', label: 'すべて' },
   { id: 'frontend-domestic', label: 'FE(国内)' },
   { id: 'frontend-international', label: 'FE(海外)' },
   { id: 'web-domestic', label: 'Web(国内)' },
