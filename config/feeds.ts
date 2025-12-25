@@ -92,12 +92,6 @@ export const feeds: FeedConfig[] = [
     category: 'web-general',
   },
   {
-    id: 'maromaro',
-    name: 'Maromaro Blog',
-    url: 'https://blog.maromaro.co.jp/feed',
-    category: 'web-general', // OPMLの構造通りここに配置していますが国内サイトです
-  },
-  {
     id: 'speckyboy',
     name: 'Speckyboy Design Magazine',
     url: 'http://feeds.feedburner.com/speckboy-design-magazine',
@@ -181,6 +175,12 @@ export const feeds: FeedConfig[] = [
     url: 'http://www.1stwebdesigner.com/feed/',
     category: 'web-general',
   },
+  {
+    id: 'sidebar-io',
+    name: 'Sidebar.io',
+    url: 'https://sidebar.io/feed.xml',
+    category: 'web-general',
+  },
 
   // --- フロントエンド（国内） ---
   {
@@ -229,12 +229,6 @@ export const feeds: FeedConfig[] = [
     id: 'codegrid',
     name: 'CodeGrid',
     url: 'https://www.codegrid.net/feed.xml',
-    category: 'frontend-domestic',
-  },
-  {
-    id: 'menthas-prog',
-    name: 'Menthas #programming',
-    url: 'http://menthas.com/programming/rss',
     category: 'frontend-domestic',
   },
   {
@@ -365,12 +359,12 @@ export const feeds: FeedConfig[] = [
     url: 'http://frontendfront.com/feed/stories',
     category: 'frontend-international',
   },
-  {
-    id: 'echo-js',
-    name: 'Echo JS',
-    url: 'http://www.echojs.com/rss',
-    category: 'frontend-international',
-  },
+  // {
+  //   id: 'echo-js',
+  //   name: 'Echo JS',
+  //   url: 'http://www.echojs.com/rss',
+  //   category: 'frontend-international',
+  // },
   {
     id: 'designer-news',
     name: 'Designer News',

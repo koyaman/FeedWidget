@@ -49,7 +49,7 @@ export default function Home() {
         <div className="flex items-center justify-between mb-2 px-1">
           <div className="flex items-center gap-2 text-cyber-primary drop-shadow-neon-text">
             <Terminal size={14} />
-            <h1 className="font-bold tracking-widest">FEED_WIDGET_V1.0</h1>
+            <h1 className="font-bold tracking-widest">FEED_WIDGET_V0.01</h1>
           </div>
           <button 
             onClick={fetchFeeds} 
