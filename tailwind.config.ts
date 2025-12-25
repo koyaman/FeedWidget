@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         cyber: {
-          black: "#050505",
+          black: "#191919",
           dark: "#0a0f14",
           slate: "#1a1f26",
           text: "#e0e0e0",
