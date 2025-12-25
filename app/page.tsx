@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import { categories, FeedCategory } from '@/config/feeds';
 import type { FeedItem } from '@/app/api/feeds/route';
-import { ExternalLink, RefreshCw, AlertCircle } from 'lucide-react';
+import { ExternalLink, RefreshCw, AlertCircle, Terminal } from 'lucide-react';
 
 export default function Home() {
   const [items, setItems] = useState<FeedItem[]>([]);
@@ -27,7 +27,7 @@ export default function Home() {
       setLastUpdated(new Date());
     } catch (err) {
       console.error(err);
-      setError('フィードの取得に失敗しました');
+      setError('SYSTEM ERROR: Feed retrieval failed.');
     } finally {
       setLoading(false);
     }
@@ -43,31 +43,34 @@ export default function Home() {
   }, [items, activeCategory]);
 
   return (
-    <main className="min-h-screen bg-notion-bg text-notion-text p-4">
+    <main className="min-h-screen bg-cyber-black text-cyber-text p-2 font-mono text-xs">
       {/* Header / Tabs */}
-      <div className="sticky top-0 bg-notion-bg/95 backdrop-blur-sm z-10 pb-4 border-b border-notion-border mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Latest News</h1>
+      <div className="sticky top-0 bg-cyber-black/95 backdrop-blur-sm z-10 pb-2 border-b border-cyber-slate mb-2">
+        <div className="flex items-center justify-between mb-2 px-1">
+          <div className="flex items-center gap-2 text-cyber-primary drop-shadow-neon-text">
+            <Terminal size={14} />
+            <h1 className="font-bold tracking-widest">FEED_WIDGET_V1.0</h1>
+          </div>
           <button 
             onClick={fetchFeeds} 
             disabled={loading}
-            className="text-gray-400 hover:text-gray-600 transition-colors p-1"
-            title="更新"
+            className="text-cyber-dim hover:text-cyber-primary transition-colors p-1 hover:animate-pulse"
+            title="RELOAD SYSTEM"
           >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
         
-        <div className="flex gap-2 overflow-x-auto no-scrollbar">
+        <div className="flex gap-1 overflow-x-auto no-scrollbar pb-1">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
               className={`
-                px-3 py-1 text-sm rounded-md whitespace-nowrap transition-colors
+                px-2 py-0.5 border transition-all duration-300 whitespace-nowrap uppercase tracking-wider
                 ${activeCategory === cat.id 
-                  ? 'bg-gray-800 text-white shadow-sm' 
-                  : 'bg-notion-gray text-gray-600 hover:bg-gray-200'
+                  ? 'border-cyber-primary bg-cyber-primary/10 text-cyber-primary shadow-neon-blue' 
+                  : 'border-cyber-slate text-cyber-dim hover:border-cyber-dim hover:text-cyber-text'
                 }
               `}
             >
@@ -78,20 +81,21 @@ export default function Home() {
       </div>
 
       {/* Content */}
-      <div className="space-y-1">
+      <div className="space-y-[1px]">
         {error && (
-          <div className="p-4 rounded-md bg-red-50 text-red-600 flex items-center gap-2 text-sm">
-            <AlertCircle size={16} />
+          <div className="p-2 border border-cyber-secondary/50 text-cyber-secondary flex items-center gap-2 bg-cyber-secondary/5">
+            <AlertCircle size={14} />
             {error}
           </div>
         )}
 
         {loading && items.length === 0 ? (
           // Loading Skeletons
-          Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="animate-pulse p-3 rounded-md space-y-2">
-              <div className="h-4 bg-gray-100 rounded w-3/4"></div>
-              <div className="h-3 bg-gray-100 rounded w-1/4"></div>
+          Array.from({ length: 10 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-2 py-1 px-1 animate-pulse opacity-50">
+              <div className="w-16 h-3 bg-cyber-slate"></div>
+              <div className="flex-1 h-3 bg-cyber-slate"></div>
+              <div className="w-8 h-3 bg-cyber-slate"></div>
             </div>
           ))
         ) : (
@@ -101,40 +105,40 @@ export default function Home() {
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="block p-3 rounded-md hover:bg-notion-gray transition-colors group"
+              className="group flex items-center gap-3 py-1 px-1 hover:bg-cyber-slate/50 hover:pl-2 transition-all duration-200 border-l-2 border-transparent hover:border-cyber-primary truncate"
             >
-              <div className="flex items-start justify-between gap-2">
-                <h2 className="text-sm font-medium leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">
-                  {item.title}
-                </h2>
-                <ExternalLink size={12} className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
-              </div>
-              
-              <div className="flex items-center gap-2 mt-1.5 text-xs text-gray-500">
-                <span className={`
-                  px-1.5 py-0.5 rounded text-[10px] font-medium
-                  ${getCategoryColor(item.category)}
-                `}>
-                  {item.source}
-                </span>
-                <span>
-                  {format(new Date(item.date), 'MM/dd HH:mm', { locale: ja })}
-                </span>
-              </div>
+              {/* Category/Source Badge */}
+              <span className={`
+                shrink-0 w-[80px] text-[10px] text-right truncate opacity-70 group-hover:opacity-100 transition-opacity
+                ${getCategoryColor(item.category)}
+              `}>
+                [{item.source}]
+              </span>
+
+              {/* Title */}
+              <span className="flex-1 truncate text-cyber-text group-hover:text-cyber-primary transition-colors">
+                {item.title}
+              </span>
+
+              {/* Date */}
+              <span className="shrink-0 text-[10px] text-cyber-dim font-light">
+                {format(new Date(item.date), 'MM-dd HH:mm', { locale: ja })}
+              </span>
             </a>
           ))
         )}
 
         {!loading && filteredItems.length === 0 && !error && (
-          <div className="text-center py-10 text-gray-400 text-sm">
-            記事がありません
+          <div className="text-center py-10 text-cyber-dim">
+            NO_DATA_FOUND
           </div>
         )}
       </div>
       
+      {/* Footer Status */}
       {lastUpdated && !loading && (
-        <div className="text-[10px] text-gray-300 text-center mt-8 pb-2">
-          Last updated: {format(lastUpdated, 'HH:mm:ss')}
+        <div className="text-[10px] text-cyber-dim/50 text-right mt-4 border-t border-cyber-slate pt-1">
+          SYSTEM_SYNC: {format(lastUpdated, 'HH:mm:ss')}
         </div>
       )}
     </main>
@@ -143,10 +147,17 @@ export default function Home() {
 
 function getCategoryColor(category: string): string {
   switch (category) {
-    case 'tech': return 'bg-blue-50 text-blue-600';
-    case 'domestic': return 'bg-red-50 text-red-600';
-    case 'international': return 'bg-purple-50 text-purple-600';
-    case 'other': return 'bg-orange-50 text-orange-600';
-    default: return 'bg-gray-100 text-gray-600';
+    case 'frontend-domestic':
+    case 'web-domestic': 
+      return 'text-cyber-primary'; // Cyan
+    case 'frontend-international':
+    case 'web-general': 
+      return 'text-cyber-secondary'; // Magenta
+    case 'accessibility': 
+      return 'text-cyber-accent'; // Lime
+    case 'tech': 
+      return 'text-cyber-warning'; // Yellow
+    default: 
+      return 'text-cyber-dim';
   }
 }
